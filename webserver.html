@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #alert-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* Giữa các ô vuông */
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            width: 700px;
+            /* Độ rộng của container */
+        }
+
+        .alert-box {
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+            /* Khoảng cách giữa ô vuông và lề ngoại cùng */
+        }
+
+        #gas-alert {
+            color: #ffcc00;
+            font-size: 18px;
+            /* Kích thước chữ */
+        }
+
+        #fire-alert {
+            color: #ff0000;
+            font-size: 18px;
+            /* Kích thước chữ */
+        }
+    </style>
+    <title>Gas and Fire Alert</title>
+</head>
+
+<body>
+    <div id="alert-container">
+        <div class="alert-box">
+            <p id="gas-alert">%gasMsg%</p>
+        </div>
+        <div class="alert-box">
+            <p id="fire-alert">%fireMsg%</p>
+        </div>
+    </div>
+
+    <script>
+        var Socket;
+        function init() {
+            Socket = new WebSocket('ws://' + window.location.hostname + ':81/');
+            Socket.onmessage = function (event) {
+                processCommand(event);
+            };
+        }
+        function processCommand(event) {
+            var obj = JSON.parse(event.data);
+            document.getElementById('fire-alert').innerHTML = obj.fireStatus;
+            document.getElementById('gas-alert').innerHTML = obj.smokeStatus;
+            console.log(fireStatus);
+            console.log(smokeStatus)
+        }
+        window.onload = function (event) { init(); }
+    </script>
+</body>
+
+</html>
